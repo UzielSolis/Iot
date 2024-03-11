@@ -1,0 +1,30 @@
+#include "HX711.h"
+
+// Definir los pines del módulo HX711
+#define PIN_HX711_DT 26
+#define PIN_HX711_SCK 27
+
+// Inicializar la biblioteca HX711
+HX711 hx711;
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println("Iniciando la celda de carga...");
+
+  // Configurar la celda de carga
+  hx711.begin(PIN_HX711_DT, PIN_HX711_SCK);
+  hx711.set_scale(); // Este valor depende de tu celda de carga específica y puede requerir calibración
+  hx711.tare();  // Asegura que el valor inicial sea 0
+  Serial.println("Celda de carga lista para usar.");
+}
+
+void loop() {
+  // Leer el peso
+  float peso = hx711.get_units(5); // Lee el peso en gramos. El '5' indica el número de lecturas para promediar
+
+  Serial.print("Peso: ");
+  Serial.print(peso, 2); // Imprime el peso con 2 decimales
+  Serial.println(" g");
+
+  delay(1000); // Espera un segundo antes de la próxima lectura
+}
